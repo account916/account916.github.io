@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<style>
+  body {
+    padding: 50px;
+    width: 1200px;
+    margin: auto;
+    text-align: left;
+    font-weight: 300;
+    font-family:  "Helvetica Neue", Helvetica;
+    color:#383838;
+    font-size: 20px;
+    line-height: 1.5;
+  }
+  table.center {
+  margin-left:auto;
+  margin-right:auto;
+}
+</style>
+<p style="font-family: helvetica">
+
+<h1 id="proj1">CS 194-26 Computer Vision & Computational Photography</h1>
+<h2 id="subtitle">Programming Project 5 A/B: [Auto]Stitching Photo Mosaics</h2>
+<h2 id="subtitle">By Alek Petuskey</h2>
+<h2 id="overview">Overview</h2>
+<p> In this project I stitch together many photographs to create larger composite images</p>
+<h2 id="overview">Part A: IMAGE WARPING and MOSAICING</h2>
+<p> The first step of this project was shooting and digitizing images to use for the
+warping and mosaicing. Below are some of the images I used for testing.</p>
+<table style="width:50%" class="center">
+  <tr><th>
+  <img src="yard1.jpg" alt="drawing" width="600"/><th> <th>
+  <img src="yard2.jpg" alt="drawing" width="600"/><th> </tr>
+  <tr><th>
+  <img src="keys1.jpg" alt="drawing" width="600"/><th> <th>
+  <img src="keys2.jpg" alt="drawing" width="600"/><th> </tr>
+  <tr><th>
+  <img src="paint1.jpg" alt="drawing" width="600"/><th> <th>
+  <img src="paint2.jpg" alt="drawing" width="600"/><th> </tr>
+</table>
+<h2 id="overview">Recover Homographies & Warping & Image Image Rectification</h2>
+<p> I calculated Homographies using the formula  formula p' = Hp, where H is a 3x3 matrix with 8 degrees of freedom.
+In this project I defined a set of correspondences between the images using a simple ginput tool in python. Using these corrdinates and homograph
+matrix I then used inverse warping and  interpolation to determine the values of these coordinates of the warped polygon.</p>
+<table style="width:50%" class="center">
+  <tr><th>
+  <img src="yard2.jpg" alt="drawing" width="500"/><th> <th>
+  <img src="warped.png" alt="drawing" width="600"/><th> <th>
+  <tr><th>
+  <img src="paint2.jpg" alt="drawing" width="500"/><th> <th>
+  <img src="warped1.png" alt="drawing" width="600"/><th> <th>
+  <tr><th>
+</table>
+
+<h2 id="overview">Mosaics</h2>
+<p> Onced I finished the steps above I moved on to integrating them into a mosaic.
+I annoted 4 pooints on the images and calculated the homography matrix. I then warped the left image to fit the right images.
+I then blended to make the transition smoother.</p>
+
+<p>***The other two examples of the mosiac are below in the results section.</p>
+<table style="width:50%" class="center">
+  <tr><th>
+  <img src="yard1.jpg" alt="drawing" width="600"/><th> <th>
+  <img src="yard2.jpg" alt="drawing" width="600"/><th> </tr>
+  <tr><th>
+</table>
+<table style="width:50%" class="center">
+  <tr><th>
+  <img src="manmos.png" alt="drawing" width="800"/><th> </tr>
+  <tr><th>
+</table>
+
+<h2 id="overview">Part B: FEATURE MATCHING for AUTOSTITCHING</h2>
+<h2 id="overview">Detect Corners</h2>
+<p> I started out this section by using the provided starter code harris.py to detect all the corners in each image.
+  I think corners serve as good indicators of various important features in the images
+  which allows for accurate matching.</p>
+<table style="width:50%" class="center">
+  <tr><th>
+  <img src="harris1.png" alt="drawing" width="600"/><th> <th>
+  <img src="harris2.png" alt="drawing" width="600"/><th> <th>
+</table>
+
+<h2 id="overview">Adaptive Non-Maximal Suppression</h2>
+<p>Once I have the point from harris I had to reduce them making sure
+they were still evenly spread arount the image. I did this by calculating the radiusa between every point
+to other points. I kept the points with the highest corner values retrospectivly with there neighbors.
+I ended up keeping the largest 500 as seen below.</p>
+
+<table style="width:50%" class="center">
+  <tr><th>
+  <img src="anms1.png" alt="drawing" width="600"/><th> <th>
+  <img src="anms2.png" alt="drawing" width="600"/><th> <th>
+</table>
+<h2 id="overview">Feature Descriptor Extraction and Matching</h2>
+<p></p>
+<table style="width:50%" class="center">
+  <tr><th>
+  <img src="matched1.png" alt="drawing" width="600"/><th> <th>
+  <img src="matched2.png" alt="drawing" width="600"/><th> <th>
+</table>
+
+<h2 id="overview"> Random Sample Consensus RANSAC</h2>
+<p>In this section I implement Random sample consensus (RANSAC) is an iterative
+   method to estimate parameters of a mathematical model from a set of observed
+   data that contains outliers, when outliers are to be accorded no influence on
+   the values of the estimates.</p>
+<table style="width:50%" class="center">
+  <tr><th>
+  <img src="rans1.png" alt="drawing" width="600"/><th> <th>
+  <img src="rans2.png" alt="drawing" width="600"/><th> <th>
+</table>
+
+<h2 id="overview"> Results</h2>
+<p> The left hand column is manual done with labeling points
+and the other column is automatic</p>
+<table style="width:50%" class="center">
+  <tr><th>
+  <img src="manmos.png" alt="drawing" width="600"/><th> <th>
+  <img src="mosyard.png" alt="drawing" width="600"/><th> <th>
+</table>
+
+<table style="width:50%" class="center">
+  <tr><th>
+  <img src="paintman.png" alt="drawing" width="600"/><th> <th>
+  <img src="paintauto.png" alt="drawing" width="600"/><th> <th>
+</table>
+
+
+<table style="width:50%" class="center">
+  <tr><th>
+  <img src="keysman1.png" alt="drawing" width="600"/><th> <th>
+  <img src="keysauto.png" alt="drawing" width="600"/><th> <th>
+</table>
+
+</html>
